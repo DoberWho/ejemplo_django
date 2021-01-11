@@ -9,89 +9,86 @@ from django.db import models
 
 
 
-class Cart(models.Model):
-    id_producto = models.ForeignKey('ProductoVariante', models.DO_NOTHING, db_column='id_producto')
-    amount = models.PositiveIntegerField(blank=True, null=True)
-    id_user = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='id_user')
-    created = models.DateTimeField(blank=True, null=True)
+class CategoriesCategory(models.Model):
+    name = models.CharField(unique=True, max_length=250)
 
     class Meta:
         managed = False
-        db_table = 'cart'
+        db_table = 'categories_category'
 
 
-class Categoria(models.Model):
-    name = models.CharField(max_length=50)
-
-    class Meta:
-        managed = False
-        db_table = 'categoria'
 
 
-class MnCategoriaProducto(models.Model):
-    id_producto = models.ForeignKey('Product', models.DO_NOTHING, db_column='id_producto')
-    id_categoria = models.ForeignKey(Categoria, models.DO_NOTHING, db_column='id_categoria')
+class PollsArticle(models.Model):
+    headline = models.CharField(max_length=100)
 
     class Meta:
         managed = False
-        db_table = 'mn_categoria_producto'
+        db_table = 'polls_article'
 
 
-class MnProductTag(models.Model):
-    id_product = models.ForeignKey('Product', models.DO_NOTHING, db_column='id_product', blank=True, null=True)
-    id_tag = models.ForeignKey('Tag', models.DO_NOTHING, db_column='id_tag', blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'mn_product_tag'
-
-
-class Person(models.Model):
-    lastname = models.CharField(max_length=50)
-    name = models.CharField(max_length=50)
+class PollsArticlePublications(models.Model):
+    article = models.ForeignKey('PollsArticle', models.DO_NOTHING)
+    publication = models.ForeignKey('PollsPublication', models.DO_NOTHING)
 
     class Meta:
         managed = False
-        db_table = 'person'
+        db_table = 'polls_article_publications'
+        unique_together = (('article', 'publication'),)
+
+
+class PollsChoice(models.Model):
+    choice_text = models.CharField(max_length=200)
+    votes = models.IntegerField()
+    question = models.ForeignKey('PollsQuestion', models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'polls_choice'
+
+
+class PollsPublication(models.Model):
+    title = models.CharField(max_length=30)
+
+    class Meta:
+        managed = False
+        db_table = 'polls_publication'
+
+
+class PollsQuestion(models.Model):
+    question_text = models.CharField(max_length=200)
+    pub_date = models.DateTimeField()
+    denunciado = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'polls_question'
 
 
 class Product(models.Model):
-    description = models.CharField(max_length=50)
-    precio = models.PositiveIntegerField()
+    name = models.CharField(max_length=250)
+    price = models.DecimalField(max_digits=7, decimal_places=2)
     stock = models.PositiveIntegerField()
-    id_category = models.ForeignKey(Categoria, models.DO_NOTHING, db_column='id_category')
-    name = models.CharField(max_length=50)
+    category = models.ForeignKey(CategoriesCategory, models.DO_NOTHING)
 
     class Meta:
         managed = False
         db_table = 'product'
 
 
-class ProductoVariante(models.Model):
-    id_producto = models.ForeignKey(Product, models.DO_NOTHING, db_column='id_producto')
-    stock = models.PositiveIntegerField()
-    precio = models.PositiveIntegerField()
+class ProductTags(models.Model):
+    product = models.ForeignKey(Product, models.DO_NOTHING)
+    tag = models.ForeignKey('TagsTag', models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'product_tags'
+        unique_together = (('product', 'tag'),)
+
+
+class TagsTag(models.Model):
     name = models.CharField(max_length=50)
 
     class Meta:
         managed = False
-        db_table = 'producto_variante'
-
-
-class Tag(models.Model):
-    created = models.DateTimeField(blank=True, null=True)
-    name = models.CharField(max_length=50)
-
-    class Meta:
-        managed = False
-        db_table = 'tag'
-
-
-class Usuario(models.Model):
-    pass_field = models.CharField(db_column='pass', max_length=50)  # Field renamed because it was a Python reserved word.
-    edad = models.PositiveIntegerField()
-    login = models.CharField(max_length=50)
-
-    class Meta:
-        managed = False
-        db_table = 'usuario'
+        db_table = 'tags_tag'

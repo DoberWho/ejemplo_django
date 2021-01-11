@@ -8,6 +8,10 @@ class Question(models.Model):
 	pub_date = models.DateTimeField('Cuando Publicarlo')
 	denunciado = models.BooleanField(default=False)
 
+	class Meta:
+		ordering = ['pub_date']
+		db_table = 'poll_question'
+
 	def getJson(self):
 		if None is self:
 			return {}
@@ -27,6 +31,10 @@ class Choice(models.Model):
 	question = models.ForeignKey(Question, on_delete=models.CASCADE)
 	choice_text = models.CharField(max_length=200)
 	votes = models.IntegerField(default=0)
+
+	class Meta:
+		ordering = ['question']
+		db_table = 'poll_choice'
 
 	def getJson(self):
 		if None is self:

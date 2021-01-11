@@ -3,7 +3,10 @@ import ujson
 
 # Create your models here.
 class Category(models.Model):
-	name = models.CharField(max_length=250, unique=True, blank=False)
+	name = models.CharField(max_length=250, unique=True, blank=False) 
+	
+	class Meta:
+		db_table = 'categoria'
 
 	def getJson(self):
 		if None is self:

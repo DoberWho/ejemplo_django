@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .models import *
 from .forms import *
+import ujson
 
 # Create your views here.
 def create(request): 
@@ -16,7 +17,7 @@ def create(request):
 def read(request): 
 	# Listar todas las categorias
 	items = Category.objects.all()
-	return HttpResponse(items)
+	return HttpResponse(items) 
 
 def update(request): 
 	# Editar una Categoria

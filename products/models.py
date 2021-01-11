@@ -2,15 +2,15 @@ from django.db import models
 import ujson
 
 from categories.models import Category
-from tags.models import Tag
+from tags.models import Tag as Etiqueta
 
 # Create your models here.
 class Product(models.Model):
 	name = models.CharField(max_length=250, unique=False, blank=False)
 	price = models.DecimalField(max_digits=7, decimal_places=2)
 	stock = models.PositiveIntegerField(default=1)
-	category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=False)
-	tags = models.ManyToManyField(Tag)
+	category = models.ForeignKey(Category, on_delete=models.CASCADE)
+	tags = models.ManyToManyField(Etiqueta)
 
 	class Meta:
 		ordering = ['name']

@@ -5,6 +5,10 @@ import ujson
 class Tag(models.Model):
 	name = models.CharField(max_length=50, unique=False, blank=False)  
 
+	class Meta:
+		ordering = ['name']
+		db_table = 'tag'
+
 	def getJson(self):
 		if None is self:
 			return {}

@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'cart.apps.CartConfig',
     'categories.apps.CategoriesConfig',
     'products.apps.ProductsConfig',
-    'tags.apps.TagsConfig',
+    'tags.apps.TagsConfig', 
+    'customers'
 ]
 
 MIDDLEWARE = [
@@ -83,7 +84,7 @@ WSGI_APPLICATION = 'tienda.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ejemplo_django',
+        'NAME': 'tienda',
         'USER': 'root',
         'PASSWORD': 'y^wgdscy',
         'HOST': '127.0.0.1',
