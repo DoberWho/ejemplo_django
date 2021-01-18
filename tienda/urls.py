@@ -18,6 +18,7 @@ from django.urls import include, path
 
 urlpatterns = [
 	path('categorias/', include('categories.urls')),
+    path('tags/', include('tags.urls')),
 	path('encuestas/', include('polls.urls')),
     path('admin/', admin.site.urls),
 ]
