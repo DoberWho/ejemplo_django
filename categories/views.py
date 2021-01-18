@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import *
@@ -31,8 +32,31 @@ def read(request):
 @csrf_exempt
 def update(request): 
 	# Editar una Categoria
-	items = []
-	return HttpResponse(items)
+	idForm = IDForm(data=request.POST) 
+	nameForm = NameForm(data=request.POST)
+	if (idForm.is_valid() and nameForm.is_valid() ):
+		id = idForm.cleaned_data['id']
+		name = nameForm.cleaned_data['name']
+		try:
+			cat = Category.objects.get(id=id)
+		except ObjectDoesNotExist as ex: 
+			return HttpResponse("ID No Encontrado")
+	
+		try:
+			obj = Category.objects.get(name=name)
+		except ObjectDoesNotExist as ex: 
+			cat.name = name
+			cat.save()
+			return HttpResponse(cat)
+		return HttpResponse("Ya Existe Esa Categoria")
+
+	else:
+		if (not idForm.is_valid()):
+			return HttpResponse("FALTA ID")
+		if (not nameForm.is_valid()):
+			return HttpResponse("FALTA NAME")
+
+	return HttpResponse("XXXX")
 
 @csrf_exempt
 def delete(request): 
